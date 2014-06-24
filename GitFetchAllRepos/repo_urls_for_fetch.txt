@@ -1,0 +1,6 @@
+/home/alexx/examples
+/home/alexx/outwiker
+/home/alexx/server
+/home/alexx/cash
+/home/alexx/lynxgit
+/home/alexx/uml

@@ -1,0 +1,11 @@
+apply plugin: 'java'
+sourceSets.main.java.srcDir 'src'
+group = "ru.yaal.project"
+version = "1.0-SNAPSHOT"
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "GitFetchAllRepos"
+        )
+    }
+}
