@@ -22,7 +22,6 @@ public class GitFetchAllRepos {
                 throw new IllegalArgumentException("Repo dir doesn't exists: " + repoDir.getAbsolutePath());
             }
             String command = GIT_EXECUTABLE + " fetch --all --prune ";
-            System.out.printf("Command: %s\n", command);
             Process process = Runtime.getRuntime().exec(command, null, repoDir);
             int status = process.waitFor();
             if (status == 0) {
@@ -34,6 +33,9 @@ public class GitFetchAllRepos {
         }
     }
 
+    /**
+     * Перенаправляет поток вывода запущенного процесса (git) в консоль.
+     */
     private static void reprintOutput(Process process) throws IOException {
         InputStream is = process.getInputStream();
         int b;
@@ -48,13 +50,4 @@ public class GitFetchAllRepos {
     public static String getGitExecutable() {
         return "/usr/bin/git";
     }
-
-//    private static void runGit(String command, File gitExecutable, File repoDir) throws IOException, InterruptedException {
-//        String initCmd = gitExecutable.getAbsolutePath() + " " + command;
-//        Process gitInit = Runtime.getRuntime().exec(initCmd, null, repoDir);
-//        int status = gitInit.waitFor();
-//        if (status != 0) {
-//            throw new RuntimeException(format("Process %s return error status: %s", initCmd, status));
-//        }
-//    }
 }
