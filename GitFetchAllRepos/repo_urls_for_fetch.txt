@@ -6,3 +6,4 @@
 /home/alexx/uml
 /home/alexx/cs/mini_programs
 /home/alexx/catalog_project
+/home/alexx/cs/cash/cash2/repos
