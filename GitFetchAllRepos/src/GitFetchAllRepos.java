@@ -45,11 +45,7 @@ public class GitFetchAllRepos {
         BufferedReader reader = new BufferedReader(new FileReader(REPO_URLS));
         String line;
         while ((line = reader.readLine()) != null) {
-            File repoDir = new File(line);
-            if (!repoDir.exists()) {
-                throw new IllegalArgumentException("Repo dir doesn't exists: " + repoDir.getAbsolutePath());
-            }
-            repos.add(repoDir);
+            repos.add(new File(line));
         }
         return repos;
     }

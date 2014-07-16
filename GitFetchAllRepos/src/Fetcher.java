@@ -21,6 +21,11 @@ public class Fetcher implements Callable<String> {
     public String call() throws Exception {
         String output = repoDir.getAbsolutePath() + ":\n";
         try {
+            if (!repoDir.exists()) {
+                throw new IllegalArgumentException(
+                        String.format("ERROR: Repo dir doesn't exists: %s%n", repoDir.getAbsolutePath()));
+            }
+
             Process process = Runtime.getRuntime().exec(command, null, repoDir);
             int status = process.waitFor();
             if (status == 0) {
@@ -28,7 +33,7 @@ public class Fetcher implements Callable<String> {
             } else {
                 throw new RuntimeException();
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             output += e.getMessage();
         }
         return output;
