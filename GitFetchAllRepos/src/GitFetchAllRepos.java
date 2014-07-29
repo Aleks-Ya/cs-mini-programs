@@ -1,6 +1,6 @@
-import java.io.BufferedReader;
+import config.Config;
+
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +14,16 @@ import java.util.concurrent.Future;
  * todo Убрать из sh-скрипта смену текущей директории. Находить конфиг рядом с jar без исользования текущей директории.
  */
 public class GitFetchAllRepos {
-    private static final File REPO_URLS = new File("repo_urls_for_fetch.txt");
+    private Config config;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.printf("Read: %s\n\n", REPO_URLS.getAbsolutePath());
-        List<File> repos = readRepos();
+    public void run() throws IOException, InterruptedException {
+        List<File> repos = config.getRepositories();
         List<Fetcher> fetchers = makeFetchers(repos);
         List<Future<String>> undoneFutures = executeFetchers(fetchers);
         printOutput(undoneFutures);
     }
 
-    private static void printOutput(List<Future<String>> undoneFutures) throws InterruptedException {
+    private void printOutput(List<Future<String>> undoneFutures) throws InterruptedException {
         while (!undoneFutures.isEmpty()) {
             List<Future<String>> done = new ArrayList<>();
             for (Future<String> future : undoneFutures) {
@@ -41,17 +40,7 @@ public class GitFetchAllRepos {
         }
     }
 
-    private static List<File> readRepos() throws IOException {
-        List<File> repos = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new FileReader(REPO_URLS));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            repos.add(new File(line));
-        }
-        return repos;
-    }
-
-    private static List<Fetcher> makeFetchers(List<File> repos) {
+    private List<Fetcher> makeFetchers(List<File> repos) {
         List<Fetcher> fetchers = new ArrayList<>();
         for (File repoDir : repos) {
             fetchers.add(new Fetcher(repoDir));
@@ -59,11 +48,14 @@ public class GitFetchAllRepos {
         return fetchers;
     }
 
-    private static List<Future<String>> executeFetchers(List<Fetcher> fetchers) throws InterruptedException {
+    private List<Future<String>> executeFetchers(List<Fetcher> fetchers) throws InterruptedException {
         ExecutorService es = Executors.newFixedThreadPool(fetchers.size());
         List<Future<String>> futures = es.invokeAll(fetchers);
         es.shutdown();
         return futures;
     }
 
+    public void setConfig(Config config) {
+        this.config = config;
+    }
 }
