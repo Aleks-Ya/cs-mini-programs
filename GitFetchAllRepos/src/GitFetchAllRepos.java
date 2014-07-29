@@ -11,7 +11,6 @@ import java.util.concurrent.Future;
 
 /**
  * Вызывает команду fetch для git-репозитариев, перечисленных в repo_urls_for_fetch.txt (в отдельных потоках).
- * todo Убрать из sh-скрипта смену текущей директории. Находить конфиг рядом с jar без исользования текущей директории.
  */
 public class GitFetchAllRepos {
     private Config config;

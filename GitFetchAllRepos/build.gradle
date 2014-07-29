@@ -5,9 +5,9 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 group = "ru.yaal.project.cs"
-version = "2.2-SNAPSHOT"
+version = "2.2"
 jar.manifest.attributes(
-        "Main-Class": "GitFetchAllRepos"
+        "Main-Class": "Main"
 )
 
 dependencies.testCompile "junit:junit:4.11"

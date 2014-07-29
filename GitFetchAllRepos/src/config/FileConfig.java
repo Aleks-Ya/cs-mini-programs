@@ -26,7 +26,7 @@ public class FileConfig implements Config {
 
     @Override
     public List<File> getRepositories() {
-        out.printf("Read config from %s%n", configPath);
+        out.printf("Read config from %s%n", configPath.toAbsolutePath());
         List<File> repos = new ArrayList<>();
         try {
             List<String> repoNames = Files.readAllLines(configPath, Charset.defaultCharset());
@@ -34,7 +34,7 @@ public class FileConfig implements Config {
                 repos.add(new File(repoName));
             }
         } catch (IOException e) {
-            throw new IllegalArgumentException("Error read config file " + configPath);
+            throw new IllegalArgumentException("Error read config file " + configPath.toAbsolutePath());
         }
         return repos;
     }
