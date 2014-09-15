@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static java.lang.System.out;
+
 /**
  * Вызывает команду fetch для git-репозитариев, перечисленных в repo_urls_for_fetch.txt (в отдельных потоках).
  */
@@ -16,10 +18,13 @@ public class GitFetchAllRepos {
     private Config config;
 
     public void run() throws IOException, InterruptedException {
+        Timer timer = new Timer().start();
         List<File> repos = config.getRepositories();
         List<Fetcher> fetchers = makeFetchers(repos);
         List<Future<String>> undoneFutures = executeFetchers(fetchers);
         printOutput(undoneFutures);
+        timer.finish();
+        out.println("Time: " + timer);
     }
 
     private void printOutput(List<Future<String>> undoneFutures) throws InterruptedException {
@@ -29,7 +34,7 @@ public class GitFetchAllRepos {
                 try {
                     if (future.isDone()) {
                         done.add(future);
-                        System.out.printf("%s%n", future.get());
+                        out.printf("%s%n", future.get());
                     }
                 } catch (ExecutionException e) {
                     e.printStackTrace();
