@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 /**
  * Поток, выполняющий fetch.
  */
-public class Fetcher implements Callable<String> {
+class Fetcher implements Callable<String> {
     private static final String GIT_EXECUTABLE = getGitExecutable();
     private static final String command = GIT_EXECUTABLE + " fetch --all --prune ";
 

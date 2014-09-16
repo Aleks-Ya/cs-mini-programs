@@ -14,7 +14,7 @@ import static java.lang.System.out;
 /**
  * Вызывает команду fetch для git-репозитариев, перечисленных в repo_urls_for_fetch.txt (в отдельных потоках).
  */
-public class GitFetchAllRepos {
+class GitFetchAllRepos {
     private Config config;
 
     public void run() throws IOException, InterruptedException {
