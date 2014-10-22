@@ -7,6 +7,7 @@ import java.io.IOException;
  * todo Инсталлятор под Linux
  * todo Определять ситуацию, когда не введен пароль в ssh-add
  * todo Выводить информацию по каждому репозитарию по мере завершения его задачи
+ * todo Добавить логирование в файл
  */
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
