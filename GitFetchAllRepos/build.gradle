@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
 apply plugin: 'java'
 sourceSets.main.java.srcDir 'src'
 sourceSets.test.java.srcDir 'test'
@@ -6,12 +9,57 @@ targetCompatibility = JavaVersion.VERSION_1_7
 defaultTasks('jar')
 
 group = 'ru.yaal.project.cs'
-version = '2.3'
+version = '2.4'
 jar.manifest.attributes(
         'Main-Class': 'Main',
         'Version': "${version}"
 )
 
+File homeDir = homeDir()
+final def installDir = new File(homeDir, 'fetchall')
+final def shName = 'run.sh'
+final def shInstall = new File(installDir, shName)
+
+task installLinux(dependsOn: build, type: Copy) {
+    doFirst() {
+        File shFile = new File(jar.archivePath.parent, shName)
+        shFile.withWriter { out ->
+            out.writeLine('#!/bin/bash')
+            out.writeLine("java -jar $installDir/$jar.archiveName")
+        }
+    }
+
+    from jar.archivePath.parent
+    into installDir
+    filesMatching(shName){
+        fileMode = 0755
+    }
+
+    doLast() {
+        java.nio.file.Path link = Paths.get('/usr/bin/fetchall');
+        java.nio.file.Path target = shInstall.toPath()
+        Files.deleteIfExists(link)
+        Files.createSymbolicLink(link, target)
+        new File(installDir, 'repo_urls_for_fetch.txt').createNewFile()
+    }
+}
+
 dependencies.testCompile 'junit:junit:4.11'
 
 repositories.mavenCentral()
+
+/**
+ * Определяет домашнюю директорию пользователя
+ */
+private File homeDir() {
+    def evnHome = "HOME"
+    String homeDirStr = System.getenv(evnHome)
+    if (homeDirStr == null || homeDirStr.isEmpty()) {
+        throw new GradleException("Environment virable '${evnHome}' doesn't exists")
+    }
+    final def homeDir = new File(homeDirStr)
+    if (!homeDir.exists()) {
+        throw new GradleException("User home dir doesn't exists: ${homeDirStr}")
+    }
+    homeDir
+}
