@@ -20,11 +20,15 @@ class GitFetchAllRepos {
     public void run() throws IOException, InterruptedException {
         Timer timer = new Timer().start();
         List<File> repos = config.getRepositories();
-        List<Fetcher> fetchers = makeFetchers(repos);
-        List<Future<String>> undoneFutures = executeFetchers(fetchers);
-        printOutput(undoneFutures);
-        timer.finish();
-        out.println("Time: " + timer);
+        if (!repos.isEmpty()) {
+            List<Fetcher> fetchers = makeFetchers(repos);
+            List<Future<String>> undoneFutures = executeFetchers(fetchers);
+            printOutput(undoneFutures);
+            timer.finish();
+            out.println("Time: " + timer);
+        } else {
+            out.println("No repos in config");
+        }
     }
 
     private void printOutput(List<Future<String>> undoneFutures) throws InterruptedException {
